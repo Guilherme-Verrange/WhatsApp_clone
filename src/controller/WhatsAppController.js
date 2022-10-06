@@ -50,6 +50,41 @@ class WhatsAppController{
 
         });
 
+        this.el.photoContainerEditProfile.on('click', e=>{
+
+            this.el.inputProfilePhoto.click();
+    
+    
+        });
+
+
+        this.el.inputNamePanelEditProfile.on('keypress', e=>{
+
+            if(e.key === 'Enter') {
+
+                e.preventDefault();
+                this.el.btnSavePanelEditProfile.click();
+            }
+        });
+
+        this.el.btnSavePanelEditProfile.on('click', e=>{
+
+            console.log(this.el.inputNamePanelEditProfile.innerHTML);
+
+        });
+
+        this.el.formPanelAddContact.on('submit', e=>{
+
+            e.preventDefault();
+
+
+
+
+            let formData = new FormData(this.el.formPanelAddContact);
+
+        });
+    
+
     }
 
 
@@ -134,6 +169,27 @@ class WhatsAppController{
           Element.prototype.hasClass = function(name){
             return this.classList.contains(name);
           
+          }
+
+          HTMLFormElement.prototype.getForm = function () {
+
+            return new FormData(this);
+
+          }
+
+
+          HTMLFormElement.prototype.toJSON = function () {
+
+          let json = {};
+
+          this.getForm().forEach((value, key) =>{
+
+            json[key] = value;
+  
+          });
+
+          return json;
+
           }
 
     }
