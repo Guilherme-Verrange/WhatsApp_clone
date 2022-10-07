@@ -1,4 +1,4 @@
-export class CameraController{
+class CameraController{
 
     constructor(videoEl){
 
@@ -8,6 +8,7 @@ export class CameraController{
 
         }).then(stream=>{
 
+            this._stream = stream;
             this._videoEl.src = URL.createObjectURL(stream);
             this.videoEl.play();
 
@@ -15,6 +16,16 @@ export class CameraController{
 
             console.log(err);
         })
+
+    }
+
+    stop(){
+
+        this._stream.getTracks().forEach(track=>{
+
+            track.stop();
+
+        });
 
     }
 

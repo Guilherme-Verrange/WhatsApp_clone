@@ -1,4 +1,4 @@
- export class Format {
+ class Format {
 
     static getCamelCase(text){
 
