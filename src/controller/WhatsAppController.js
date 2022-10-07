@@ -1,4 +1,7 @@
-class WhatsAppController{
+import Format from './../utils/Format';
+import CameraController from './CameraController';
+
+export default class WhatsAppController{
     constructor(){
         console.log('WhatsAppController Ok');
         this.elementsProtoType();
@@ -179,7 +182,7 @@ class WhatsAppController{
 
            });
 
-           this._camera = new CameraController();
+           this._camera = new CameraController(this.el.videoCamera);
 
         });
 
