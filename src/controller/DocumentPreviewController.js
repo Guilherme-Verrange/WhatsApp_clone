@@ -1,3 +1,11 @@
+const pdfjsLib = require ('pdfjs-dist');
+const path = require ('path');
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = path.resolve(__dirname, '../../dist/pdf.worker.bundle.js');
+
+
+
+
 export class DocumentPreviewController {
 
     constructor(file){
@@ -10,6 +18,7 @@ export class DocumentPreviewController {
 
         return new Promise((s, f)=>{
 
+            let reader = new FileReader();
 
             switch (this._file.type) {
 
@@ -39,6 +48,52 @@ export class DocumentPreviewController {
                 break;
                 
                 case 'application/pdf':
+
+
+                    reader.onload = event => {
+
+                        pdfjsLib.getDocument(new Uint8Array(reader.result)).then(pdf => {
+
+                            pdf.getPage(1).then(page => {
+
+                                let viewport = page.getViewport(1);
+
+                                let canvas = document.createElement('canvas');
+                                let canvasContext = canvas.getContext('2d');
+
+                                canvas.height = viewport.height;
+                                canvas.width = viewport.width;
+
+                                page.render({
+                                    canvasContext,
+                                    viewport
+                                }).then(() => {
+
+                                    let _s = (pdf.numPages > 1) ? 's' : '';
+
+                                    resolve({
+                                        src: canvas.toDataURL('image/png'),
+                                        info: `${pdf.numPages} página${_s}`
+                                    });
+
+                                });
+
+                            });
+
+                        }).catch(event => {
+
+                            reject({
+                                error: true,
+                                event
+                            });
+
+                        });                   
+
+                    };
+
+                    reader.readAsArrayBuffer(this._file);
+
+                    break;
 
                 break;
 
