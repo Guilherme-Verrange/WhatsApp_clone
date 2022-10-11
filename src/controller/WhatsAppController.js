@@ -1,3 +1,5 @@
+import { Firebase } from "../utils/Firebase";
+
 export class WhatsAppController{
 
     constructor(){
@@ -7,6 +9,7 @@ export class WhatsAppController{
         this.elementsProtoType();
         this.loadElements();
         this.initEvents();
+        this._firebase = new Firebase();
 
     }
 
