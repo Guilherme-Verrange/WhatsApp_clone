@@ -1,57 +1,83 @@
-import { MicrophoneController } from "./MicrophoneController";
+export class WhatsAppController{
 
-class WhatsAppController{
     constructor(){
+
         console.log('WhatsAppController Ok');
+
         this.elementsProtoType();
         this.loadElements();
         this.initEvents();
+
     }
+
     loadElements(){
+
         this.el = {};
+
         document.querySelectorAll('[id]').forEach(element=>{
+
             this.el[Format.getCamelCase(element.id)] = element;
+
         });
     }
+
     elementsProtoType(){
+
         Element.prototype.hide = function(){
+
             this.style.display = 'none';
             return this;
         }
         Element.prototype.show = function(){
+
             this.style.display = 'block';
             return this;
+
         }
-        Element.prototype.toogle = function(){
+        Element.prototype.toggle = function(){
+
             this.style.display = (this.style.display === 'none') ? 'block' : 'none'; 
             return this;
         }
         Element.prototype.on = function(events, fn){
+
             events.split(' ').forEach(event=>{
+
                 this.addEventListener(event, fn);
+
             });
-            return this; 
+            return this;
         }
+
         Element.prototype.css = function(styles){
+
             for(let name in styles){
+
                 this.style[name] = styles[name]
+
             }
             return this;
         }
+
         Element.prototype.addClass = function (name){
+
             this.classList.add(name);
             return this;
         } 
         Element.prototype.removeClass = function (name){
+
             this.classList.remove(name);
             return this;
         } 
-        Element.prototype.toogleClass = function (name){
-            this.classList.toogle(name);
+        Element.prototype.toggleClass = function (name) {
+
+            this.classList.toggle(name);
             return this;
-        } 
+
+        }
         Element.prototype.hasClass = function (name){
-            return this.classList.contains(name);
+
+            return this.classList.contais(name);
 
         } 
         HTMLFormElement.prototype.getForm = function () {
@@ -75,40 +101,40 @@ class WhatsAppController{
     initEvents(){
 
         this.el.myPhoto.on('click', e=>{
+
             this.closeAllLeftPanel();
             this.el.panelEditProfile.show();
             setTimeout(()=>{
                 this.el.panelEditProfile.addClass('open');
             }, 300);
+
         })
 
         this.el.btnNewContact.on('click', e=>{
 
             this.closeAllLeftPanel();
-
             this.el.panelAddContact.show();
             setTimeout(()=>{
                 this.el.panelAddContact.addClass('open');
             }, 300);
             
         })
-
         this.el.btnClosePanelEditProfile.on('click', e=>{
-            this.el.panelEditProfile.removeClass('open');
-        })
 
+
+            this.el.panelEditProfile.removeClass('open');
+
+        })
         this.el.btnClosePanelAddContact.on('click', e=>{
  
             this.el.panelAddContact.removeClass('open');
 
         })
-
         this.el.photoContainerEditProfile.on('click', e=>{
 
             this.el.inputProfilePhoto.click();
 
         });
-
         this.el.inputNamePanelEditProfile.on('keypress', e=>{
 
             if(e.key === 'Enter'){
@@ -158,7 +184,6 @@ class WhatsAppController{
 
             this.el.inputPhoto.click();
 
-
         });
 
         this.el.inputPhoto.on('change', e=>{
@@ -166,184 +191,184 @@ class WhatsAppController{
             console.log(this.el.inputPhoto.files);
 
             [...this.el.inputPhoto.files].forEach(file=>{
-
+               
                 console.log(file);
 
             });
-
         });
+
         this.el.btnAttachCamera.on('click', e=>{
 
             this.closeAllMainPanel();
-           this.el.panelCamera.addClass('open');
-           this.el.panelCamera.css({
-                'height': 'calc(100% - 120px)'
+            this.el.panelCamera.addClass('open');
+            this.el.panelCamera.css({
+                'height':'100%'
+            });
 
-           });
-
-           this._camera = new CameraController(this.el.videoCamera);
-
+            this._camera = new CameraController(this.el.videoCamera);
         });
+        this.el.btnClosePanelCamera.on('click', e=> {
 
-        this.el.btnClosePanelCamera.on('click', e=>{
-
-            
             this.closeAllMainPanel();
             this.el.panelMessagesContainer.show();
             this._camera.stop();
-             
- 
-         });
 
-         this.el.btnTakePicture.on('click', e=>{
+        });
 
-          let dataUrl = this._camera.takePicture();
-          this.el.pictureCamera.src = dataUrl;
-          this.el.pictureCamera.show();
-          this.el.videoCamera.hide();
-          this.el.btnReshootPanelCamera.show();
-          this.el.btnTakePicture.hide();
-          this.el.containerSendPicture.show();
-         });
+        this.el.btnTakePicture.on('click', e=>{
+           
+            let dataURL = this._camera.takePicture();
 
-         this.el.btnReshootPanelCamera.on(click, e=>{
+            this.el.pictureCamera.src = dataURL;
+            this.el.pictureCamera.show();
+            this.el.videoCamera.hide();
+            this.el.btnReshootPanelCamera.show();
+            this.el.containerTakePicture.hide();
+            this.el.containerSendPicture.show();
 
-          this.el.pictureCamera.hide();
-          this.el.videoCamera.show();
-          this.el.btnReshootPanelCamera.hide();
-          this.el.btnTakePicture.show();
-          this.el.containerSendPicture.hide();
+        });
 
+        this.el.btnReshootPanelCamera.on('click', e=>{
 
-         });
+            this.el.pictureCamera.hide();
+            this.el.videoCamera.show();
+            this.el.btnReshootPanelCamera.hide();
+            this.el.containerTakePicture.show();
+            this.el.containerSendPicture.hide();
 
-         this.el.btnSendPicture.on('click', e=>{
+        });
 
+        this.el.btnSendPicture.on('click', e=>{
 
+            console.log(this.el.pictureCamera.src);
 
-         });
-
-
+        });
 
         this.el.btnAttachDocument.on('click', e=>{
 
             this.closeAllMainPanel();
-            this.el.panelDocumentPreview.addClass('open')
+            this.el.panelDocumentPreview.addClass('open');
             this.el.panelDocumentPreview.css({
-                'height': 'calc(100% - 120px)'
-
-           });
-
-           this.el.inputDocument.click();
+                'height':'calc(100% - 120px)'
+            });
+            this.el.inputDocument.click();
 
         });
 
-        this.el.inputDocument.on('change', event => {
+        this.el.inputDocument.on('change', e=>{
 
-            if (this.el.inputDocument.files.length) {
+            this.el.panelDocumentPreview.css({
+                'height':'1%'
+            });
+
+            if (this.el.inputDocument.files.length){
 
                 let file = this.el.inputDocument.files[0];
 
-                this.closeAllMainPanel();
-                this.el.panelMessagesContainer.hide();
-                this.el.panelDocumentPreview.addClass('open');
-                this.el.panelDocumentPreview.sleep(500, () => {
-                    this.el.panelDocumentPreview.style.height = 'calc(100% - 120px)';
-                });
+                this._documentPreviewController = new DocumentPreviewController(file);
 
+                this._documentPreviewController.getPreviewData().then(result=>{
 
-                this._documentPreview = new DocumentPreviewController(file);
-
-                this._documentPreview.getPriviewData().then(result => {
-
-                    this.el.filePanelDocumentPreview.hide();
-                    this.el.imagePanelDocumentPreview.show();
                     this.el.imgPanelDocumentPreview.src = result.src;
-                    this.el.imgPanelDocumentPreview.show();
-
                     this.el.infoPanelDocumentPreview.innerHTML = result.info;
+                    this.el.imagePanelDocumentPreview.show();
+                    this.el.filePanelDocumentPreview.hide();
 
-                }).catch(event => {
+                    this.el.panelDocumentPreview.css({
+                        'height':'100%'
+                    });
 
-                    if (event.error) {
-                        console.error(event.event);
-                    } else {
+                }).catch(err=>{
+                    this.el.panelDocumentPreview.css({
+                        'height':'100%'
+                    });
 
-                        switch (file.type) {
-                            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                            case 'application/msword':
-                                this.el.iconPanelDocumentPreview.classList.value = 'jcxhw icon-doc-doc';
-                                break;
+                    console.log(file.type);
+                    switch (file.type){
 
-                            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-                            case 'application/vnd.ms-excel':
-                                this.el.iconPanelDocumentPreview.classList.value = 'jcxhw icon-doc-xls';
-                                break;
+                        case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                        case 'application/vnd.ms-excel':
+                            this.el.iconPanelDocumentPreview.className = 'jcxhw icon-doc-xls';
+                        break;
 
-                            case 'application/vnd.ms-powerpoint':
-                            case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
-                                this.el.iconPanelDocumentPreview.classList.value = 'jcxhw icon-doc-ppt';
-                                break;
+                        case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+                        case 'application/vnd.ms-powerpoint':
+                            this.el.iconPanelDocumentPreview.className = 'jcxhw icon-doc-ppt';
+                        break;
 
-                            default:
-                                this.el.iconPanelDocumentPreview.classList.value = 'jcxhw icon-doc-generic';
-                        }
+                        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                        case 'application/msword':
+                            this.el.iconPanelDocumentPreview.className = 'jcxhw icon-doc-doc';
+                        break;
 
-                        this.el.filePanelDocumentPreview.show();
-                        this.el.imagePanelDocumentPreview.hide();
-
-                        this.el.filenamePanelDocumentPreview.innerHTML = file.name;
-
+                        default:
+                            this.el.iconPanelDocumentPreview.className = 'jcxhw icon-doc-generic';
                     }
+
+                    this.el.filenamePanelDocumentPreview.innerHTML = file.name;
+                    this.el.imagePanelDocumentPreview.hide();
+                    this.el.filePanelDocumentPreview.show();
 
                 });
 
             }
 
         });
-       
+
+        this.el.btnClosePanelDocumentPreview.on('click', e=>{
+
+            this.closeAllMainPanel();
+            this.el.panelMessagesContainer.show();
+
+        });
         this.el.btnSendDocument.on('click', e=>{
 
             console.log('send document');
 
         });
-
+        
         this.el.btnAttachContact.on('click', e=>{
 
-           this.el.modalContacts.show();
+            this.el.modalContacts.show();
 
         });
-
         this.el.btnCloseModalContacts.on('click', e=>{
 
             this.el.modalContacts.hide();
+
         });
-
-
         this.el.btnSendMicrophone.on('click', e=>{
 
             this.el.recordMicrophone.show();
-            this.startRecordMicrophoneTime();
+            this.el.btnSendMicrophone.hide();
 
             this._microphoneController = new MicrophoneController();
-            this._microphoneController.on('play', ()=>{
 
+            this._microphoneController.on('ready', musica=>{
+
+                console.log('ready event');
+                this._microphoneController.startRecoder();
 
             });
-            
+
+            this._microphoneController.on('recordtimer', timer=>{
+
+                this.el.recordMicrophoneTimer.innerHTML = Format.toTime(timer);
+
+            });
 
         });
 
-        this.el.btnCancelMicrophone.on('click', e=> {
+        this.el.btnCancelMicrophone.on('click', e=>{
 
-            this.el.recordMicrophone.hide();
+            this._microphoneController.stopRecoder();
+            this.CloseRecordMicrophone();
 
         });
+        this.el.btnFinishMicrophone.on('click', e=>{
 
-        this.el.btnFinishMicrophone.on('click', e=> {
-
-            this.el.recordMicrophone.hide();
-
+            this._microphoneController.stopRecoder();
+            this.CloseRecordMicrophone();
 
         });
 
@@ -375,23 +400,15 @@ class WhatsAppController{
 
         });
 
-        this.el.btnEmojis.on('click', event => {
+        this.el.btnEmojis.on('click', e=>{
 
-            this.el.panelEmojis.addClass('open');
-
-            if (this.el.panelEmojis.hasClass('open')) {
-                this.el.iconEmojisOpen.hide();
-                this.el.iconEmojisClose.show();
-            } else {
-                this.el.iconEmojisOpen.show();
-                this.el.iconEmojisClose.hide();
-            }
+            this.el.panelEmojis.toggleClass('open');
 
         });
 
-        this.el.panelEmojis.querySelectorAll('.emojik').forEach(emoji => {
+        this.el.panelEmojis.querySelectorAll('.emojik').forEach(emoji=>{
 
-            emoji.on('click', event => {
+            emoji.on('click', e=>{
 
                 let img = this.el.imgEmojiDefault.cloneNode();
 
@@ -399,37 +416,36 @@ class WhatsAppController{
                 img.dataset.unicode = emoji.dataset.unicode;
                 img.alt = emoji.dataset.unicode;
 
-                emoji.classList.forEach(cls => {
+                emoji.classList.forEach(name => {
 
-                    img.classList.add(cls);
+                    img.classList.add(name);
 
                 });
-
+ 
                 let cursor = window.getSelection();
 
-                if (!cursor.focusNode || cursor.focusNode.id !== 'input-text') {
-                    this.el.inputText.focus();
+                if(!cursor.focusNode || !cursor.focusNode.id == 'input-text'){
+
+                    this.el.input.focus();
                     cursor = window.getSelection();
                 }
 
-                
                 let range = document.createRange();
-               
+
                 range = cursor.getRangeAt(0);
-                
                 range.deleteContents();
-               
-                var frag = document.createDocumentFragment();
-               
+
+                let frag = document.createDocumentFragment();
+
                 frag.appendChild(img);
-                
+
                 range.insertNode(frag);
-                          
+
                 range.setStartAfter(img);
 
-                this.el.inputText.dispatchEvent(new Event('keyup'));
+                this.el.inputText.dispatchEvent(new Event('keyup')); 
 
-            });
+            })
 
         });
 
@@ -438,31 +454,17 @@ class WhatsAppController{
             console.log(this.el.inputText.innerHTML);
 
         });
-
     }
 
-    startRecordMicrophoneTime(){
-
-        let start = Date.now();
-        this._recordMicrophoneInterval = setInterval(()=>{
-
-           
-            this.el.recordMicrophoneTimer.innerHTML = Format.toTime(Date.now() - start);
-
-        }, 100);
-
-    }
-
-    closeRecordMicrophone(){
+    CloseRecordMicrophone(){
 
         this.el.recordMicrophone.hide();
-        this.el.recordMicrophone.show();
-        clearInterval(this._recordMicrophoneInterval);
-
+        this.el.btnSendMicrophone.show();
+    
     }
 
     closeAllMainPanel(){
-        
+
         this.el.panelMessagesContainer.hide();
         this.el.panelDocumentPreview.removeClass('open');
         this.el.panelCamera.removeClass('open');
@@ -470,14 +472,16 @@ class WhatsAppController{
     }
 
     closeMenuAttach(e){
-
+        
         document.removeEventListener('click', this.closeMenuAttach);
         this.el.menuAttach.removeClass('open');
 
     }
 
     closeAllLeftPanel(){
+
         this.el.panelEditProfile.hide();
         this.el.panelAddContact.hide();
+
     }
 }
