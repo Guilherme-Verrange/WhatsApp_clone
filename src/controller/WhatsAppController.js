@@ -1,3 +1,5 @@
+import { MicrophoneController } from "./MicrophoneController";
+
 class WhatsAppController{
     constructor(){
         console.log('WhatsAppController Ok');
@@ -322,6 +324,12 @@ class WhatsAppController{
 
             this.el.recordMicrophone.show();
             this.startRecordMicrophoneTime();
+
+            this._microphoneController = new MicrophoneController();
+            this._microphoneController.on('play', ()=>{
+
+
+            });
             
 
         });
