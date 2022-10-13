@@ -1,8 +1,10 @@
+import { ClassEvent } from "../util/ClassEvent";
+
 export class MicrophoneController extends ClassEvent {
 
     constructor(){
 
-        super(); 
+        super();
 
         this._mimeType = 'audio/webm';
 

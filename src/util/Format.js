@@ -1,4 +1,4 @@
- class Format {
+export class Format {
 
     static getCamelCase(text){
 
@@ -8,8 +8,7 @@
 
         return Object.keys(div.firstChild.dataset)[0];
 
-    }//Converte os ID dos elementos HTML em CamelCase]
-
+    }
 
     static toTime(duration){
 
