@@ -1,10 +1,9 @@
-import {Format} from '../util/Format';
+import {Format} from './../util/Format';
 import {CameraController} from './CameraContoller';
-
 import {MicrophoneController} from './MicrophoneController';
 import {DocumentPreviewController} from './DocumentPreviewController';
-import {Firebase} from '../util/Firebase';
-import { User } from '../util/model/User';
+import {Firebase} from './../util/Firebase';
+import { User } from '../model/User';
 
 export class WhatsAppController{
 
@@ -24,24 +23,39 @@ export class WhatsAppController{
 
         this._firebase.initAuth()
         .then((response) => {
-            
-            this._user = new User();
 
-            let userRef = User.findByEmail(responde.user.email);
+            this._user = new User(response.user.email);
 
-            userRef.set({
-                name: response.user.displayName,
-                email: responde.user.email,
-                photo: response.user.photoURL
+            this._user.on('datachange', data => {
+      
+                document.querySelector('title').innerHTML = data.name + ' - WhatsApp Clone';
 
-            }).then(()=>{
+                this.el.inputNamePanelEditProfile.innerHTML = data.name;
+                
+                if(data.photo){
 
-                this.el.appContent.css({
-                    display: 'flex'
-                });
+                    let photo = this.el.imgPanelEditProfile;
+                    photo.src = data.photo;
+                    photo.show(); 
+                    this.el.imgDefaultPanelEditProfile.hide();
+
+                    let photo2 = this.el.myPhoto.querySelector('img');
+                    photo2.src = data.photo;
+                    photo2.show(); 
+
+                }
+
             });
 
-            this.el.appContent.css({display:'flex'}); 
+            this._user.name = response.user.displayName;
+            this._user.email = response.user.email;
+            this._user.photo = response.user.photoURL;
+
+            this._user.save().then(()=>{
+
+                this.el.appContent.css({display:'flex'});  
+
+            });
 
         })
         .catch(err=>{
@@ -483,7 +497,7 @@ export class WhatsAppController{
 
                 range.setStartAfter(img);
 
-                this.el.inputText.dispatchEvent(new Event('keyup')); 
+                this.el.inputText.dispatchEvent(new Event('keyup'));
 
             })
 
